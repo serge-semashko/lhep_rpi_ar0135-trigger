@@ -1,0 +1,12 @@
+[Service]
+# Даем знать systemd, что этот сервис представляет из себя лишь 1 процесс. Man page хорошо описывает доступные опции.
+# Выполнить эту команду при запуске сервиса.
+ExecStart=/home/ubuntu/ard_lhep/run.sh
+WorkingDirectory=/home/ubuntu/ard_lhep
+[Unit]
+Description=make shot by trigger
+Requires=lhep_web_serv.service 
+After=lhep_web_serv.service 
+
+[Install]
+WantedBy=multi-user.target

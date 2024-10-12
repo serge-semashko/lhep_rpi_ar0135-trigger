@@ -1,0 +1,1 @@
+sudo python3 ard_wr.py -v --preview-width 1280 -f 1.cfg

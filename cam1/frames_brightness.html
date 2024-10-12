@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <title>Fr Br</title>
+    <style>
+    .content .left {
+      float: left;
+      width: 500px;
+      background-color: green;
+    }
+    
+    .content .right {
+      margin-left: 100px;
+      width: 1300px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+    
+ <div class=content>
+     <div class=left>
+
+
+        <div> <input type = "text" id = "br"> <input type = "button" value = "Задать яркость" onclick = "sendBr()"> </div>
+        <div> <input type = "button" value = "Удалить кадры" onclick = "delFr()"></div>
+                <div id = 'rezult'></div>
+
+    </div>
+    <div class=rigth>
+        <img id=last_jpg src="http://192.168.1.175/get_frame?file=last.jpg" width=1000>
+    </div>        
+
+</div>    
+</body>
+
+<script>
+    function delFr(){
+        console.log('checking');
+        url = 'http://192.168.1.175/delete_frames';
+        fetch(url)
+        .then((response) => {
+            if (response.ok) {
+                console.log('Deleted');
+            }
+        })
+    }
+
+    function sendBr(){
+        console.log('checking');
+        console.log(document.getElementById('br').value);
+        url = 'http://192.168.1.175/set_brightness?brightness=' + document.getElementById('br').value;
+        fetch(url)
+        .then((response) => {
+            if (response.ok) {
+                console.log('brightness setted');
+            }
+        })
+    }
+function refresh_list(){
+
+    let url = 'http://192.168.1.170/get_frames_list'
+    console.log('fetch '+url);
+    fetch(url,{
+        method:"GET"
+    })
+    .then(function(response){
+        return response.json()
+    })
+    .then(function(res){
+        console.log('success');
+        let data_rez = JSON.parse(res);
+        console.log(data_rez);
+        console.log(typeof(data_rez));
+        let rez_tabl = '<table class = "tab_1" id = "frame_tabl"><tr><th>Название кадра</th><th>Показать кадр</th></tr><tbody>';
+        let lastsrc='';    
+        for (let i = 0; i < data_rez.length; i++){
+            if (i == 1){
+                lastsrc= "http://192.168.1.175/get_frame?file=" + data_rez[i] ;
+            }
+            console.log(data_rez[i]);
+            rez_tabl += '<tr><td>' + data_rez[i] + '</td><td><a target = "_blank" href = "http://192.168.1.175/get_frame?file=' + data_rez[i] + '">' + data_rez[i] + '</a></td></tr>'
+        }
+        rez_tabl += '</tbody></table>'
+
+        document.getElementById('rezult').innerHTML = rez_tabl;
+        document.getElementById('last_jpg').src=lastsrc;
+        // document.getElementById('last_jpg').update();
+
+    })
+}    
+refresh_list();
+var intervalID = setInterval(refresh_list, 200);    
+
+</script>

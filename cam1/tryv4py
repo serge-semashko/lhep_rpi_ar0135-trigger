@@ -1,0 +1,76 @@
+FRAME_COUNT = 5
+import v4l2
+import fcntl
+import mmap
+
+def xioctl( fd, request, arg):
+
+    r = 0
+
+    cond = True
+    while cond == True:
+        r = fcntl.ioctl(fd, request, arg)
+        cond = r == -1
+        #cond = cond and errno == 4
+
+    return r
+
+class buffer_struct:
+    start  = 0
+    length = 0
+
+# Open camera driver
+fd = open('/dev/video1','r+b')
+
+BUFTYPE = v4l2.V4L2_BUF_TYPE_VIDEO_CAPTURE
+MEMTYPE = v4l2.V4L2_MEMORY_MMAP
+
+# Set format
+fmt = v4l2.v4l2_format()
+fmt.type = BUFTYPE
+fmt.fmt.pix.width       = 640
+fmt.fmt.pix.height      = 480
+fmt.fmt.pix.pixelformat = v4l2.V4L2_PIX_FMT_MJPEG
+fmt.fmt.pix.field       = v4l2.V4L2_FIELD_NONE # progressive
+
+xioctl(fd, v4l2.VIDIOC_S_FMT, fmt)
+
+buffer_size = fmt.fmt.pix.sizeimage
+print("buffer_size = " + str(buffer_size))
+
+# Request buffers
+req = v4l2.v4l2_requestbuffers()
+
+req.count  = 4
+req.type   = BUFTYPE
+req.memory = MEMTYPE
+
+xioctl(fd, v4l2.VIDIOC_REQBUFS, req)
+
+if req.count < 2:
+    print("req.count < 2")
+    quit()
+
+n_buffers = req.count
+
+buffers = list()
+for i in range(req.count):
+    buffers.append( buffer_struct() )
+
+# Initialize buffers. What should I do here? This doesn't work at all.
+# I've tried with USRPTR (pointers) but I know no way for that in Python.
+for i in range(n_buffers):
+
+    buf = v4l2.v4l2_buffer()
+
+    buf.type      = BUFTYPE
+    buf.memory    = MEMTYPE
+    buf.index     = i
+
+    xioctl(fd, v4l2.VIDIOC_QUERYBUF, buf)
+
+    buffers[i].length = buf.length
+    buffers[i].start  = mmap.mmap(fd.fileno(), buf.length,
+                                  flags  = mmap.PROT_READ,# | mmap.PROT_WRITE,
+                                  prot   = mmap.MAP_SHARED,
+                                  offset = buf.m.offset )

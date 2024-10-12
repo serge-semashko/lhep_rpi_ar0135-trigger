@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Show must</title>
+  </head>
+  <body id="body">
+    <img id="bunch_img" src="http://192.168.1.175/get_frame?file=4.jpg">
+  <script>
+      function get_image() {
+        // let flor_num = document.getElementById("selectFloorId");
+        // // var value = flor_num.value;
+        // let text = flor_num.options[flor_num.selectedIndex].text;
+        // console.log("flor_num = ", text);
+
+        // let build_id = document.getElementById("select_get_building_id");
+        // //console.log("build_id= ", build_id.options[build_id.selectedIndex].text);
+        // let num = build_id.options[build_id.selectedIndex].value;
+        // console.log("build_id = ", num);
+
+        // build_id = num;
+        // floor_num = text;
+
+        // let obj_type = "building_image";
+        // //    let url = 'http://127.0.0.1:8082/get_picture?' + "building_id=" + num.toString() + "&floor_num=" + text.toString() + "&object_type=" + obj_type.toString();
+        let url =
+          "http://192.168.1.175/get_frame?file=4.jpg";
+        fetch(url).then((response) => {
+          if (response.ok) {
+            image = document.createElement("img");
+            image.src = url;
+            document.getElementById('body').appendChild(image);            
+            // image = L.imageOverlay(image, bounds).addTo(lit_map);
+          } else {
+            alert("Нет изображения для выбранного этажа.");
+          }
+        });
+      }
+      get_image();
+    </script>
+  </body>
+</html>

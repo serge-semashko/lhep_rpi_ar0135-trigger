@@ -1,0 +1,1 @@
+sudo python3 ArduCam_Py_Demo.py 1.cfg
