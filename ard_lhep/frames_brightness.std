@@ -42,23 +42,7 @@ var dloc;
 
     </div>
     <div class=rigth style="background-color:#202020;border: 1px black">
-        <table>
-            <tr>
-                <td>
-                <img id=last_jpg src="http://"+hostname+"/get_frame?file=last.png">
-                </td><td>
-                    <img id=barh_jpg src="http://"+hostname+"/get_frame?file=last.png">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <img id=bar_jpg src="http://"+hostname+"/get_frame?file=last.png">
-                </td>
-                <td>
-                    
-                </td>
-                </tr>
-                   </table>
+        <img id=last_jpg src="http://"+hostname+"/get_frame?file=last.png">
     </div>        
 
 </div>    
@@ -124,21 +108,14 @@ function refresh_list(){
         rez_tabl += '</tbody></table>'
 
         document.getElementById('rezult').innerHTML = rez_tabl;
-        console.log('lastsrc '+lastsrc);
-        lastsrc = lastsrc.split('=')[1];
-        console.log(lastsrc);
-        console.log(lastsrc.split('.')[0]);
-
-        let mark = lastsrc.split('.')[0]+'-markup.png';
-        document.getElementById('last_jpg').src="http://"+hostname+"/get_frame?file=" +mark;
-        document.getElementById('barh_jpg').src="http://"+hostname+"/get_frame?file=" +lastsrc.split('.')[0]+'-barh.png';;
-        document.getElementById('bar_jpg').src="http://"+hostname+"/get_frame?file=" +lastsrc.split('.')[0]+'-bar.png';;
+        document.getElementById('last_jpg').src=lastsrc;
  //       document.getElementById('last_jpg').update();
+        lastsrc = lastsrc.split('=');
         document.getElementById('last_name').innerHTML=lastsrc[1];
 
     })
 }    
 refresh_list();
-var intervalID = setInterval(refresh_list, 1000);    
+var intervalID = setInterval(refresh_list, 200);    
 
 </script>
