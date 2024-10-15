@@ -10,7 +10,7 @@ from os import listdir
 from flask import request
 from flask import Flask
 from flask import make_response
-import procshot
+from procshot import *
 app = Flask(__name__)
 
 fbr = open('last_br.txt', 'r')
@@ -177,6 +177,63 @@ def get_file():
     resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     return resp
 
+@app.route('/get_oneshot', methods=['GET'])
+def get_oneshot():
+    print("connect")
+    params = {}
+    for i in request.args:
+        params[str(i)] = request.args[i]
+    inprm = str(params)
+    print("connect 1" + inprm)
+    try:
+        file_name = params['file']
+        shot_src = file_name.split('.')[0]
+        file_name = 'one_shot.html'
+        ff = open(file_name, 'r')
+        bin = ff.read()
+        bin = bin%(shot_src);
+        resp = make_response(bin, 200)
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print("*** print_tb:")
+        traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+        print("*** format_exc, first and last line:")
+        res_data = traceback.format_exc().splitlines()
+        print(res_data)
+        resp = make_response(res_data, 400)
+    resp.headers['content-type'] = ' text/html; charset=utf-8'
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return resp
+
+
+@app.route('/get_all_shots', methods=['GET'])
+def get_all_shots():
+    print("connect")
+    import subprocess
+    process = subprocess.Popen('zip all_arch 202*.*', shell=True, stdout=subprocess.PIPE)
+    process.wait()
+    print(process.returncode)
+    file_name = 'all_arch.zip'
+    try:
+        ff = open(file_name, 'rb')
+        bin = ff.read()
+        resp = make_response(bin, 200)
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print("*** print_tb:")
+        traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+        print("*** format_exc, first and last line:")
+        res_data = traceback.format_exc().splitlines()
+        print(res_data)
+        resp = make_response(res_data, 400)
+
+    resp.headers['content-type'] = 'application/zip'
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return resp
+
+
 
 
 @app.route('/get_shot/<file_name>', methods=['GET'])
@@ -200,10 +257,12 @@ def get_shot(file_name):
     return resp
 
 def process_shots():
+    print('process_shots():')
     files_ok = []
     while 1==1:
         a=1
         flist = listdir('.')
+        # print(str(flist))
         for i in flist:
             if i[-3:] != 'png':
                 continue
@@ -225,10 +284,9 @@ def process_shots():
             # print( os.path.isfile(fname+'-barh.png'))
             # print( os.path.isfile(fname+'-markup.png'))
             if os.path.isfile(fname+'-bar.png') and os.path.isfile(fname+'-barh.png') and  os.path.isfile(fname+'-markup.png') and os.path.isfile(fname+'.txt'):
-
                 continue
-            kx = (2 ** 0.5) / 2
-            ky = 1 / 2
+            # kx = (2 ** 0.5) / 2
+            # ky = 1 / 2
     #                process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, imname, 4, 2, 1))
             # kx =(1* (2 ** 0.5) )/ 2
             # ky = 1/2 
@@ -244,7 +302,7 @@ def process_shots():
             # w2=1
             # w3=1
 
-            procshot.process_shot(kx, ky, xl, yu, xr, yd, x_len, y_len, x_tab, y_tab, i, w1, ws2, w3)
+            process_shot(kx, ky, xl, yu, xr, yd, x_len, y_len, x_tab, y_tab, i, w1, w2, w3)
             files_ok.append(i)    
             print('processed '+i)
         time.sleep(1)
@@ -253,7 +311,7 @@ def process_shots():
 # kx = (2 ** 0.5) / 2
 # ky = 1 / 2
 # process_shots()
-
+print('aaaaa')
 pro_shots  = threading.Thread(target=process_shots, args=(),daemon=False)
 pro_shots.start()
 app.run(debug=False, host="0.0.0.0", port=80)

@@ -6,8 +6,8 @@
     <title>Fr Br</title>
     <style>
     .content .left {
-      float: left;
-      width: 500px;
+      float: right;
+      width: 35%;
       color:#aaaaaa;      
       background-color: #303030;
     }
@@ -15,9 +15,8 @@
       background-color: #202020;
 	}                                        
    .right {
-      float: right;
-      1margin-left: 100px;
-      width: 1500px;
+      float: left;
+      width: 60%;
       background-color: #444444;
     }
   </style>
@@ -31,29 +30,32 @@ var dloc;
     
  <div class=content>
      <div class=left>
-
+        <h1>
+            <a style="color:white" target = "_blank" href = "http://192.168.1.170/get_all_shots">Скачать весь архив</a>
+        </h1>
 
         <div> <input type = "text" id = "br"> <input type = "button" value = "Выдержка" onclick = "sendBr()"> <br>
         <i id=last_name>aaaaa</i>
    </div>
      
         <div> <input type = "button" value = "Удалить кадры" onclick = "delFr()"></div>
-                <div id = 'rezult'></div>
+                <div id = 'rezult' style="height: 900px; overflow-y: auto;" ></div>
 
     </div>
+    
     <div class=rigth style="background-color:#202020;border: 1px black">
         <table>
             <tr>
                 <td>
-                <img id=last_jpg src="http://"+hostname+"/get_frame?file=last.png" style="padding:30px 0px 0px 40px">
+                <img id=last_jpg height=211  src="http://"+hostname+"/get_frame?file=last.png" style="padding:20px 0px 0px 30px">
                 </td><td>
-                    <img id=barh_jpg height=300 src="http://"+hostname+"/get_frame?file=last.png">
+                    <img id=barh_jpg height=250 src="http://"+hostname+"/get_frame?file=last.png">
                 </td>
 
             </tr>
             <tr>
                 <td>
-                    <img id=bar_jpg width=340  src="http://"+hostname+"/get_frame?file=last.png">
+                    <img id=bar_jpg width=370  height=150 src="http://"+hostname+"/get_frame?file=last.png">
                 </td>
                 <td id="table_stat" style="color:white">
 
@@ -120,7 +122,7 @@ function refresh_list(){
                 
             }
             console.log(data_rez[i]);
-            rez_tabl += '<tr><td>' + data_rez[i] + '</td><td><a target = "_blank" href = "http://192.168.1.170/get_frame?file=' + data_rez[i] + '">' + data_rez[i] + '</a></td></tr>'
+            rez_tabl += '<tr><td>'  + '</td><td><a target = "_blank" href = "http://192.168.1.170/get_oneshot?file=' + data_rez[i] + '">' + data_rez[i] + '</a></td></tr>'
         }
         rez_tabl += '</tbody></table>'
 

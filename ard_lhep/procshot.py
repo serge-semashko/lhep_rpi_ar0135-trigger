@@ -28,7 +28,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     import matplotlib.pyplot as plt
 
     img = cv2.imread(filename)
-    print(img.shape)
+    # print(img.shape)
     img = img[yu:yd+1, xl:xr+1]
     # print(img.shape)
     xr=xr-xl
@@ -96,7 +96,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     
     bw = cv2.cvtColor(rabrect, cv2.COLOR_BGR2GRAY)
     qtbl = '<table border=1 style="border-collapse: collapse;">'
-    qtbl +='<tr><td>Size</td><td>Min</td><td>Max</td><td>Неодн.</td><td>Mean</td><td>Std</td></tr>'
+    qtbl +='<tr><td>Size</td><td>Min</td><td>Max</td><td>Неодн.</td><td>Mean</td><td>Std</td><td>Ц.М.</td></tr>'
     for i in range(5):
         qtbl +='<tr><td>'+str((i+1)*10)+'мм</td>'
         q_range = math.trunc(pmm * (i+1)*10/2)
@@ -123,10 +123,10 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
         a_y= np.sum(bwt, axis = 1)
         cm_x = ndimage.measurements.center_of_mass(a_x)[0]
         cm_y = ndimage.measurements.center_of_mass(a_y)[0]
-        print(str(a_x))
-        print(str(cm_x))    
-        print(str(a_y))
-        print(str(cm_y))    
+        # print(str(a_x))
+        # print(str(cm_x))    
+        # print(str(a_y))
+        # print(str(cm_y))    
         min = np.min(bwt)
         max = np.max(bwt)
         if max>0:
@@ -138,7 +138,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
         # qtbl += '<tr><td>Center='+str(x_c1)+'</td><td>'+str(y_c1)+'</td><td> '+str(cm)+'</td><td> %.2f,  %.2f '%(mcol,mrow)+'</td></tr>'
         qtbl += '<td>'+str(min)+'</td><td>'+str(max)+'</td><td>%.2f'%(uni)+'</td><td>%.2f'%(np.mean(bwt)) + '</td><td>%.2f'%(np.std(bwt))
         
-        qtbl +='<br> Центр масс=(%.2f, %.2f)'%(mcol, mrow)+'</td></tr>'
+        qtbl +='</td><td>(%.2f, %.2f)'%(mcol, mrow)+'</td></tr>'
     file = open(filename.split('.')[0]+'_tbl.html', 'w')
     file.write(qtbl)        
     file.close()        
@@ -168,7 +168,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
             rd = [piece_yd, piece_xr]
 
             pieces.append([lu, rd])
-    print(time.time()-t1);
+    # print(time.time()-t1);
     rezmatr = np.zeros([nx, ny], dtype=int)
     for i in range(len(pieces)):
         sr = getsr(pieces[i], rabrect)
@@ -198,8 +198,8 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     x = [((xl + (x_piece_range * (i + 1))) - center_x) * pmm for i in range(nx)]
     y = [((yu + (y_piece_range * (i + 1))) - center_y) * pmm for i in range(ny)]
 
-    print(x)
-    print(y)
+    # print(x)
+    # print(y)
     # print(time.time()-t1);
     # plt.margins(0,0)
     # plt.gca().set_axis_off()
@@ -257,7 +257,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     #     cv2.line(img, (xl, i), (xr, i), (0, 0, 0), thickness=thick_5mm)
 
     cv2.imwrite(filename.split('.')[0] + '-markup.png', img)
-    print(img.shape)
+    # print(img.shape)
     rezmatr = rezmatr.transpose()
     file = open(filename.split('.')[0]+'.txt', 'w')
     resstr = ''
@@ -271,7 +271,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     mrow = round(cm[0])
     mcol = round(cm[1])   
     restbl = 'Min='+str(min)+' Max='+str(max)+' Неоднородность=%.2f'%(uni)+' Среднее=%.2f'%(np.mean(rezmatr)) + ' ст.Откл.=%.2f'%(np.std(rezmatr))
-    restbl +='<br> Центр масс=(%.2f, %.2f)'%(cm[0], cm[1])+' ('+str(round(cm[0]))+', '+str(round(cm[1]))+')<br><table border=1 style="border-collapse: collapse;padding:5px;">'
+    restbl +='<br>Ц.м.=(%.2f, %.2f)'%(cm[0], cm[1])+' ('+str(round(cm[0]))+', '+str(round(cm[1]))+')<br><table border=1 style="border-collapse: collapse;padding:5px;">'
     
     for i in range(ny):
         restbl +='<tr>'
@@ -285,7 +285,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
         resstr = resstr[:-2]
         restbl +='</tr>'
         resstr +='\n'
-    print(resstr)            
+    # print(resstr)            
     file.write(resstr)
     # file.write(str(rezmatr))
     file.close()
