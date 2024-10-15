@@ -151,6 +151,34 @@ def get_frame():
     resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     return resp
 
+@app.route('/get_file', methods=['GET'])
+def get_file():
+    print("connect")
+    params = {}
+    for i in request.args:
+        params[str(i)] = request.args[i]
+    inprm = str(params)
+    print("connect 1" + inprm)
+    try:
+        file_name = params['file']
+        ff = open(file_name, 'r')
+        bin = ff.read()
+        resp = make_response(bin, 200)
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print("*** print_tb:")
+        traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+        print("*** format_exc, first and last line:")
+        res_data = traceback.format_exc().splitlines()
+        print(res_data)
+        resp = make_response(res_data, 400)
+    resp.headers['content-type'] = ' text/html; charset=utf-8'
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return resp
+
+
+
 @app.route('/get_shot/<file_name>', methods=['GET'])
 def get_shot(file_name):
     print("connect")
@@ -202,7 +230,21 @@ def process_shots():
             kx = (2 ** 0.5) / 2
             ky = 1 / 2
     #                process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, imname, 4, 2, 1))
-            procshot.process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, i, 4, 1, 1)
+            # kx =(1* (2 ** 0.5) )/ 2
+            # ky = 1/2 
+            # xl=538
+            # yu=358
+            # xr=799
+            # yd=600
+            # x_len=100
+            # y_len=70
+            # x_tab=16
+            # y_tab=12
+            # w1=4
+            # w2=1
+            # w3=1
+
+            procshot.process_shot(kx, ky, xl, yu, xr, yd, x_len, y_len, x_tab, y_tab, i, w1, ws2, w3)
             files_ok.append(i)    
             print('processed '+i)
         time.sleep(1)

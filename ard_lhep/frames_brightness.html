@@ -49,13 +49,14 @@ var dloc;
                 </td><td>
                     <img id=barh_jpg height=300 src="http://"+hostname+"/get_frame?file=last.png">
                 </td>
+
             </tr>
             <tr>
                 <td>
                     <img id=bar_jpg width=340  src="http://"+hostname+"/get_frame?file=last.png">
                 </td>
-                <td>
-                    
+                <td id="table_stat" style="color:white">
+
                 </td>
                 </tr>
                    </table>
@@ -135,9 +136,28 @@ function refresh_list(){
         document.getElementById('bar_jpg').src="http://"+hostname+"/get_frame?file=" +lastsrc.split('.')[0]+'-bar.png';;
  //       document.getElementById('last_jpg').update();
         document.getElementById('last_name').innerHTML=lastsrc[1];
+        load_table(lastsrc.split('.')[0]);
+
 
     })
 }    
+function load_table(lastsrc){
+    console.log('load');
+    let  url = "http://"+hostname+"/get_file?file=" +lastsrc+'_tbl.html';
+
+    fetch(url)
+        .then((response) => {
+            if (response.ok) {
+                console.log('load complete')
+                return response.text();
+            }
+        })
+        .then((data) => {
+                    document.getElementById('table_stat').innerHTML=data;
+            console.log(data);
+        })
+}
+
 refresh_list();
 var intervalID = setInterval(refresh_list, 1000);    
 
