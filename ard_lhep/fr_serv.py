@@ -202,7 +202,7 @@ def process_shots():
             kx = (2 ** 0.5) / 2
             ky = 1 / 2
     #                process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, imname, 4, 2, 1))
-            procshot.process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, i, 4, 2, 1)
+            procshot.process_shot(kx, ky, 260, 284, 644, 762, 100, 70, 16, 12, i, 4, 1, 1)
             files_ok.append(i)    
             print('processed '+i)
         time.sleep(1)
