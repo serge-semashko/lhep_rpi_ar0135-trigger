@@ -36,7 +36,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     yd=yd-yu
     yu=0
 
-    cv2.imwrite('cat_'+filename, img)
+    # cv2.imwrite('cat_'+filename, img)
 
     # cv2.resize(img, cv2.INTER_AREA)
 
@@ -195,9 +195,11 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
         yinfo.append(s // k)
     # print(yinfo)
 
-    x = [((xl + (x_piece_range * (i + 1))) - center_x) * pmm for i in range(nx)]
-    y = [((yu + (y_piece_range * (i + 1))) - center_y) * pmm for i in range(ny)]
-
+    # x = [((xl + (x_piece_range * (i + 1))) - center_x)  for i in range(nx)]
+    # y = [((yu + (y_piece_range * (i + 1))) - center_y)  for i in range(ny)]
+    x = [((  i - nx/2) )  for i in range(nx)]
+    y = [ ((  i - ny/2) ) for i in range(ny)]
+    
     # print(x)
     # print(y)
     # print(time.time()-t1);
@@ -208,7 +210,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     # plt.gca().xaxis.set_major_locator(plt.NullLocator())
     # plt.gca().yaxis.set_major_locator(plt.NullLocator())
 # Сохраняем изображение, исключив ненужные элементы
-    plt.bar(x, xinfo, width=5)
+    plt.bar(x, xinfo, width=0.5)
     # fig.suptitle('Распределение по X')
     # plt.savefig(sys.argv[1].split('.')[0]+'-hist.png')
     plt.savefig(filename.split('.')[0] + '-bar.png')
@@ -218,7 +220,7 @@ def process_shot(kx, ky, xl, yu, xr, yd, xdlin, ydlin, nx, ny, filename, thick_c
     # ax.set_frame_on(False)
 
     
-    ax.barh(y, yinfo, height=5)
+    ax.barh(y, yinfo, height=0.5)
     ax.invert_yaxis()
     # fig.suptitle('Распределение по Y')
     # plt.margins(0,0)
@@ -303,8 +305,8 @@ xr=799
 yd=600
 x_len=100
 y_len=70
-x_tab=16
-y_tab=12
+x_tab=10
+y_tab=7
 w1=4
 w2=1
 w3=1
@@ -323,5 +325,5 @@ if __name__ == "__main__":
 
     t1 = time.time()
 
-    print('rezult -', process_shot(kx, ky, 538, 358, 799, 600, 100, 70, 16, 12, imname, 4, 1, 1))
+    print('rezult -', process_shot(kx, ky, xl, yu, xr, yd, x_len, y_len, x_tab, y_tab, imname, w1, w2, w3))
     print(time.time()-t1);

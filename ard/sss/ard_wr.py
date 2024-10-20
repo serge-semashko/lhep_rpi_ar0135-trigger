@@ -62,22 +62,15 @@ if __name__ == "__main__":
     print(ArducamSDK.Py_ArduCam_readSensorReg(camera.handle,0x3012))
     scale_width = preview_width
     ind = 1
-    while not exit_:
+    for i in range(4):
         ArducamSDK.Py_ArduCam_writeSensorReg(camera.handle,0x3012,ind)
         ret, data, cfg = camera.read()
-
         display_fps(0)
-
         if no_preview:
             continue
 
         if ret:
             image = convert_image(data, cfg, camera.color_mode)
-
-            if scale_width != -1:
-                scale = scale_width / image.shape[1]
-                image = cv2.resize(image, None, fx=scale, fy=scale)
-
             cv2.imwrite("Arducam%.4d.png"%(ind), image)
         else:
             print("timeout")

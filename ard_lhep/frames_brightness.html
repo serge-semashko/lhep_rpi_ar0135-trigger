@@ -13,7 +13,12 @@
     }
     body{
       background-color: #202020;
-	}                                        
+
+	} 
+    td {
+     font-size: 1.5rem;   
+     padding:0px 5px 0px  5px;                                       
+    }
    .right {
       float: left;
       width: 60%;
@@ -31,7 +36,7 @@ var dloc;
  <div class=content>
      <div class=left>
         <h1>
-            <a style="color:white" target = "_blank" href = "http://192.168.1.170/get_all_shots">Скачать весь архив</a>
+            <a style="color:white" target = "_blank" href = "/get_all_shots">Скачать весь архив</a>
         </h1>
 
         <div> <input type = "text" id = "br"> <input type = "button" value = "Выдержка" onclick = "sendBr()"> <br>
@@ -122,7 +127,7 @@ function refresh_list(){
                 
             }
             console.log(data_rez[i]);
-            rez_tabl += '<tr><td>'  + '</td><td><a target = "_blank" href = "http://192.168.1.170/get_oneshot?file=' + data_rez[i] + '">' + data_rez[i] + '</a></td></tr>'
+            rez_tabl += '<tr><td>'  + '</td><td><a target = "_blank" href = "http://'+hostname+'/get_oneshot?file=' + data_rez[i] + '">' + data_rez[i] + '</a></td></tr>'
         }
         rez_tabl += '</tbody></table>'
 
